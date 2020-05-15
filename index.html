@@ -73,32 +73,75 @@
 .background-colour{
     background-color: #CFD7FF
 }
-
-.site-logo {
-    float: ;
-}
   </style>
 
   <script id="insert"></script>
 
 
+    <script>
+      const customConsole = (w) => {
+        const pushToConsole = (payload, type) => {
+          w.parent.postMessage({
+            console: {
+              payload: payload,
+              type:    type
+            }
+          }, "*")
+        }
+
+        w.onerror = (message, url, line, column) => {
+          // the line needs to correspond with the editor panel
+          // unfortunately this number needs to be altered every time this view is changed
+          line = line - 79
+          if (line < 0){
+            pushToConsole(message, "error")
+          } else {
+            pushToConsole(`[${line}:${column}] ${message}`, "error")
+          }
+        }
+
+        w.console = (function(){
+          return {
+            log: (payload) => {
+              pushToConsole(payload, "log")
+            },
+            info: (payload) => {
+              pushToConsole(payload, "info")
+            },
+            warn: (payload) => {
+              pushToConsole(payload, "warn")
+            },
+            error: (payload) => {
+              pushToConsole(payload, "error")
+            },
+            system: (payload) => {
+              pushToConsole(payload, "system")
+            }
+          }
+        }())
+
+        console.system("Running fiddle")
+      }
+
+      if (window.parent){
+        customConsole(window)
+      }
+    </script>
 </head>
 <body>
     <body class=background-colour>
-<div>
 <h1 class=header>
  Sol Celebrant
 </h1>
-</div> 
 <p class=text-center>
 Ceremonies for new begginings led by the heart
 </p>
-    <img src= https://raw.githubusercontent.com/Sezdizz/SolCelebrant/master/sol%20celebrant%20logo%203.png alt= SolCelebrantlogo; style="width:240px;height:240px;> 
-<div">
+<div class="topnav">
   <a class=colour-green href="#home">Home</a>
   <a class=colour-green href="#portfolio">Portfolio</a>
   <a class=colour-green href="#about">About Jordy</a>
   <a class=colour-green href="#contact">Contact</a>
+</div>
 <div>
 <h2 class=text-center-bold>
 Ceremonies for new begginings
@@ -141,7 +184,7 @@ More about me
     if (window.parent && window.parent.parent){
       window.parent.parent.postMessage(["resultsFrame", {
         height: document.body.getBoundingClientRect().height,
-        slug: ""
+        slug: "c6ok8hjL"
       }], "*")
     }
 
@@ -149,6 +192,22 @@ More about me
     window.name = "result"
   </script>
 
+    <script>
+      let allLines = []
+
+      window.addEventListener("message", (message) => {
+        if (message.data.console){
+          let insert = document.querySelector("#insert")
+          allLines.push(message.data.console.payload)
+          insert.innerHTML = allLines.join(";\r")
+
+          let result = eval.call(null, message.data.console.payload)
+          if (result !== undefined){
+            console.log(result)
+          }
+        }
+      })
+    </script>
 
 </body>
 </html>
