@@ -20,7 +20,12 @@
 
 
   <style id="compiled-css" type="text/css">
-      .text-center-bold {
+      .logo-size {
+    height: 240px;
+    width:240px;
+}
+
+.text-center-bold {
     text-align: center;
     font-weight: bold;
 }
@@ -51,16 +56,13 @@
      margin: auto;
 }
 
-.topnav {
-    text-align: center;
-}
 
 .colour-green {
-    color: #5DB369
+    color: #5DB369;
 }
 
 .colour-peach {
-    color: #E86056
+    color: #E86056;
 }
 
 .header{
@@ -71,74 +73,28 @@
 }
 
 .background-colour{
-    background-color: #CFD7FF
+    background-color: #CFD7FF;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
   </style>
 
   <script id="insert"></script>
 
 
-    <script>
-      const customConsole = (w) => {
-        const pushToConsole = (payload, type) => {
-          w.parent.postMessage({
-            console: {
-              payload: payload,
-              type:    type
-            }
-          }, "*")
-        }
-
-        w.onerror = (message, url, line, column) => {
-          // the line needs to correspond with the editor panel
-          // unfortunately this number needs to be altered every time this view is changed
-          line = line - 79
-          if (line < 0){
-            pushToConsole(message, "error")
-          } else {
-            pushToConsole(`[${line}:${column}] ${message}`, "error")
-          }
-        }
-
-        w.console = (function(){
-          return {
-            log: (payload) => {
-              pushToConsole(payload, "log")
-            },
-            info: (payload) => {
-              pushToConsole(payload, "info")
-            },
-            warn: (payload) => {
-              pushToConsole(payload, "warn")
-            },
-            error: (payload) => {
-              pushToConsole(payload, "error")
-            },
-            system: (payload) => {
-              pushToConsole(payload, "system")
-            }
-          }
-        }())
-
-        console.system("Running fiddle")
-      }
-
-      if (window.parent){
-        customConsole(window)
-      }
-    </script>
 </head>
 <body>
     <body class=background-colour>
-<h1 class=header>
- Sol Celebrant
-</h1>
-<p class=text-center>
-Ceremonies for new begginings led by the heart
-</p>
-<div class="topnav">
+<img class=center src= https://raw.githubusercontent.com/Sezdizz/SolCelebrant/master/sol%20celebrant%20logo%203.png class2=logo-size>
+<div class=text-center>
   <a class=colour-green href="#home">Home</a>
   <a class=colour-green href="#portfolio">Portfolio</a>
+  <a class=colour-green href="#services">Services</a>
   <a class=colour-green href="#about">About Jordy</a>
   <a class=colour-green href="#contact">Contact</a>
 </div>
@@ -184,7 +140,7 @@ More about me
     if (window.parent && window.parent.parent){
       window.parent.parent.postMessage(["resultsFrame", {
         height: document.body.getBoundingClientRect().height,
-        slug: "c6ok8hjL"
+        slug: ""
       }], "*")
     }
 
@@ -192,22 +148,6 @@ More about me
     window.name = "result"
   </script>
 
-    <script>
-      let allLines = []
-
-      window.addEventListener("message", (message) => {
-        if (message.data.console){
-          let insert = document.querySelector("#insert")
-          allLines.push(message.data.console.payload)
-          insert.innerHTML = allLines.join(";\r")
-
-          let result = eval.call(null, message.data.console.payload)
-          if (result !== undefined){
-            console.log(result)
-          }
-        }
-      })
-    </script>
 
 </body>
 </html>
